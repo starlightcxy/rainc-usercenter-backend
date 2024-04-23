@@ -85,6 +85,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptPassword);
         user.setAuthCode(authCode);
+        //默认用户名就是用户账号,因为前端写了（没有用户名，头像那一块就一直加载中的逻辑），所以要有用户名
+        user.setUsername(userAccount);
+        //默认用户头像
+        user.setAvatarUrl("https://img1.baidu.com/it/u=2033371373,2531711947&fm=253&fmt=auto&app=138&f=JPEG?w=750&h=500");
         boolean saveResult = this.save(user);
         if(!saveResult){
             return -1;//这个不知道用那个错误码

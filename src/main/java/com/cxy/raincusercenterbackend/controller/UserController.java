@@ -87,7 +87,7 @@ public class UserController {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User currentUser = (User)userObj;
         if(currentUser == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);//应该改错误码?
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR, "请先登录");//应该改错误码?
         }
         //重新从库中查user，因为登录一会后，可能user信息已经被改变
         long userId = currentUser.getId();
@@ -134,7 +134,10 @@ public class UserController {
     private boolean isAdmin(HttpServletRequest request){
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User user = (User) userObj;
-        return user != null && user.getUserRole() == ADMIN_ROLE;
+
+        long userId = user.getId();
+        User nowUser = userService.getById(userId);
+        return nowUser != null && nowUser.getUserRole() == ADMIN_ROLE;
     }
 
 }
